@@ -1,0 +1,26 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+env/
+ENV/
+.env
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Logs
+*.log
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Jupyter Checkpoints
+.ipynb_checkpoints/

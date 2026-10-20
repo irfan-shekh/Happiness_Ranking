@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Happiness Ranking Predictor | AI & ML Intelligence</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-base: #0b0f19;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --bg-card-hover: rgba(26, 35, 54, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(99, 102, 241, 0.4);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-accent: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 25px 0 rgba(99, 102, 241, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Glassmorphism Navigation */
+        .navbar-glass {
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-pill-soft {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-header-custom {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .card-header-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.25);
+        }
+
+        .card-header-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Form Controls */
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-label-custom .badge-val {
+            font-family: 'Space Grotesk', monospace;
+            color: #a5b4fc;
+            background: rgba(99, 102, 241, 0.15);
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+        }
+
+        .input-glass {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.92rem;
+            padding: 10px 14px;
+            transition: all 0.2s ease;
+        }
+
+        .input-glass:focus {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+            color: #ffffff;
+            outline: none;
+        }
+
+        .input-glass option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        /* Range Slider */
+        .range-slider-wrap {
+            margin-top: 6px;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #1e293b;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #818cf8;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(129, 140, 248, 0.7);
+            transition: transform 0.15s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #a5b4fc;
+        }
+
+        /* Preset Chips */
+        .preset-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .preset-chip:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #818cf8;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .preset-chip.active {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Banner */
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 2.3rem;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 650px;
+        }
+
+        /* Action Buttons */
+        .btn-predict {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 14px 28px;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.7);
+            color: #ffffff;
+        }
+
+        .btn-predict:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary-custom {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 12px 18px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary-custom:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Results Display Card */
+        .result-panel {
+            position: sticky;
+            top: 90px;
+            background: linear-gradient(145deg, rgba(20, 27, 45, 0.9), rgba(15, 23, 42, 0.85));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 102, 241, 0.15);
+            text-align: center;
+        }
+
+        .rank-circle-wrap {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(15, 23, 42, 0.4) 70%);
+            border: 2px dashed rgba(99, 102, 241, 0.4);
+            animation: pulse-ring 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 25px 8px rgba(99, 102, 241, 0.25); }
+        }
+
+        .rank-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.4rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, #a5b4fc 0%, #ffffff 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .rank-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .tier-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tier-info {
+            background: rgba(14, 165, 233, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .tier-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .tier-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Meter Bar */
+        .rank-meter-track {
+            background: #1e293b;
+            border-radius: 12px;
+            height: 10px;
+            position: relative;
+            overflow: hidden;
+            margin: 16px 0 8px 0;
+        }
+
+        .rank-meter-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rank-meter-pointer {
+            position: absolute;
+            top: -3px;
+            width: 16px;
+            height: 16px;
+            background: #ffffff;
+            border-radius: 50%;
+            border: 3px solid #6366f1;
+            transform: translateX(-50%);
+            transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Breakdown Bars */
+        .metric-bar-wrap {
+            text-align: left;
+            margin-top: 14px;
+        }
+
+        .metric-bar-label {
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .metric-bar-track {
+            height: 6px;
+            background: #1e293b;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        /* Toast Alert */
+        .toast-custom {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .result-panel {
+                position: static;
+                margin-top: 30px;
+            }
+            .hero-title {
+                font-size: 1.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar navbar-glass py-3">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <span class="fs-4">🌍</span>
+                <div>
+                    <div class="brand-text">Happiness Index ML</div>
+                    <div style="font-size: 0.74rem; color: #94a3b8;">Global Socio-Economic Predictive Intelligence</div>
+                </div>
+            </div>
+            <div class="d-none d-md-flex align-items-center gap-2">
+                <span class="badge-pill-soft"><i class="bi bi-cpu-fill me-1"></i> Gradient Boosting Regressor</span>
+                <span class="badge-pill-soft"><i class="bi bi-graph-up me-1"></i> R² ~99.9%</span>
+                <span class="badge-pill-soft"><i class="bi bi-globe2 me-1"></i> 158 Nations</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-4">
+        
+        <!-- Hero Section -->
+        <div class="row align-items-center mb-4 pt-2">
+            <div class="col-lg-8">
+                <div class="d-inline-flex align-items-center gap-2 badge-pill-soft mb-2">
+                    <i class="bi bi-stars text-warning"></i> Machine Learning Rank Estimation
+                </div>
+                <h1 class="hero-title">Predict World Happiness Ranking</h1>
+                <p class="hero-desc">
+                    Explore how GDP, family support, life expectancy, and freedom influence a country's global ranking in the World Happiness Report.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <div class="text-muted small mb-2"><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Instant Country Presets:</div>
+                <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                    <button type="button" class="preset-chip" onclick="loadPreset('Switzerland')">🇨🇭 Switzerland (#1)</button>
+                    <button type="button" class="preset-chip" onclick="loadPreset('United States')">🇺🇸 USA (#15)</button>
+                    <button type="button" class="preset-chip" onclick="loadPreset('Brazil')">🇧🇷 Brazil (#16)</button>
+                    <button type="button" class="preset-chip" onclick="loadPreset('Japan')">🇯🇵 Japan (#46)</button>
+                    <button type="button" class="preset-chip" onclick="loadPreset('India')">🇮🇳 India (#117)</button>
+                    <button type="button" class="preset-chip" onclick="loadPreset('Burundi')">🇧🇮 Burundi (#157)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form and Results Row -->
+        <div class="row">
+            <!-- Left Side: Interactive Controls -->
+            <div class="col-lg-7">
+                <form id="happinessForm" method="post" action="{% url 'homepage' %}">
+                    {% csrf_token %}
+
+                    <!-- Card 1: Geographic Metadata -->
+                    <div class="glass-card">
+                        <div class="card-header-custom">
+                            <div class="card-header-icon"><i class="bi bi-pin-map-fill"></i></div>
+                            <div>
+                                <h2 class="card-header-title">1. Geographic Identity</h2>
+                                <span style="font-size: 0.78rem; color: #94a3b8;">Specify the nation and regional classification</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="countryNameInput">
+                                    <span>Country Name</span>
+                                    <span class="badge-val">Required</span>
+                                </label>
+                                <input id="countryNameInput" name="Country Name" type="text" class="form-control input-glass" placeholder="e.g., Switzerland, Canada, Japan" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="regionSelect">
+                                    <span>Geographic Region</span>
+                                    <span class="badge-val">Metadata</span>
+                                </label>
+                                <select id="regionSelect" name="Region" class="form-select input-glass" required>
+                                    <option value="">Select Region...</option>
+                                    <option value="Western Europe">Western Europe</option>
+                                    <option value="North America">North America</option>
+                                    <option value="Australia and New Zealand">Australia and New Zealand</option>
+                                    <option value="Middle East and North Africa">Middle East and North Africa</option>
+                                    <option value="Latin America and Caribbean">Latin America and Caribbean</option>
+                                    <option value="Southeastern Asia">Southeastern Asia</option>
+                                    <option value="Central and Eastern Europe">Central and Eastern Europe</option>
+                                    <option value="Eastern Asia">Eastern Asia</option>
+                                    <option value="Sub-Saharan Africa">Sub-Saharan Africa</option>
+                                    <option value="Southern Asia">Southern Asia</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Core Wellbeing & Economic Pillars -->
+                    <div class="glass-card">
+                        <div class="card-header-custom">
+                            <div class="card-header-icon"><i class="bi bi-cash-coin"></i></div>
+                            <div>
+                                <h2 class="card-header-title">2. Core Pillars of Happiness</h2>
+                                <span style="font-size: 0.78rem; color: #94a3b8;">Overall Cantril Ladder score and fundamental societal pillars</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- Happiness Score -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="hapScoreInput">
+                                    <span>Happiness Score (Cantril Ladder)</span>
+                                    <span class="badge-val" id="val_hapScore">7.587</span>
+                                </label>
+                                <input id="hapScoreInput" name="hapScore" type="number" step="0.001" min="0" max="10" class="form-control input-glass" value="7.587" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="2.0" max="8.0" step="0.01" value="7.587" oninput="syncVal('hapScoreInput', this.value, 'val_hapScore')">
+                                </div>
+                            </div>
+
+                            <!-- Standard Error -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="seInput">
+                                    <span>Standard Error of Score</span>
+                                    <span class="badge-val" id="val_se">0.034</span>
+                                </label>
+                                <input id="seInput" name="se" type="number" step="0.0001" min="0.001" max="0.25" class="form-control input-glass" value="0.0341" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.01" max="0.15" step="0.001" value="0.0341" oninput="syncVal('seInput', this.value, 'val_se')">
+                                </div>
+                            </div>
+
+                            <!-- Economy GDP -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="ecoInput">
+                                    <span>Economy (GDP per Capita Contribution)</span>
+                                    <span class="badge-val" id="val_eco">1.396</span>
+                                </label>
+                                <input id="ecoInput" name="eco" type="number" step="0.001" min="0" max="2.5" class="form-control input-glass" value="1.396" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="1.8" step="0.01" value="1.396" oninput="syncVal('ecoInput', this.value, 'val_eco')">
+                                </div>
+                            </div>
+
+                            <!-- Family / Social Support -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="famInput">
+                                    <span>Family / Social Support</span>
+                                    <span class="badge-val" id="val_fam">1.349</span>
+                                </label>
+                                <input id="famInput" name="fam" type="number" step="0.001" min="0" max="2.5" class="form-control input-glass" value="1.349" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="1.6" step="0.01" value="1.349" oninput="syncVal('famInput', this.value, 'val_fam')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Quality of Life & Governance Factors -->
+                    <div class="glass-card">
+                        <div class="card-header-custom">
+                            <div class="card-header-icon"><i class="bi bi-shield-heart"></i></div>
+                            <div>
+                                <h2 class="card-header-title">3. Quality of Life & Public Health</h2>
+                                <span style="font-size: 0.78rem; color: #94a3b8;">Freedom, life expectancy, generosity, and dystopia residuals</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- Health Life Expectancy -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="lifeInput">
+                                    <span>Health (Life Expectancy)</span>
+                                    <span class="badge-val" id="val_life">0.941</span>
+                                </label>
+                                <input id="lifeInput" name="life" type="number" step="0.001" min="0" max="1.5" class="form-control input-glass" value="0.941" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="1.1" step="0.01" value="0.941" oninput="syncVal('lifeInput', this.value, 'val_life')">
+                                </div>
+                            </div>
+
+                            <!-- Freedom -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="freeInput">
+                                    <span>Freedom to Make Life Choices</span>
+                                    <span class="badge-val" id="val_free">0.665</span>
+                                </label>
+                                <input id="freeInput" name="free" type="number" step="0.001" min="0" max="1.0" class="form-control input-glass" value="0.665" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="0.75" step="0.01" value="0.665" oninput="syncVal('freeInput', this.value, 'val_free')">
+                                </div>
+                            </div>
+
+                            <!-- Government Trust -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="govInput">
+                                    <span>Trust (Anti-Corruption Perception)</span>
+                                    <span class="badge-val" id="val_gov">0.419</span>
+                                </label>
+                                <input id="govInput" name="gov" type="number" step="0.001" min="0" max="1.0" class="form-control input-glass" value="0.419" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="0.6" step="0.01" value="0.419" oninput="syncVal('govInput', this.value, 'val_gov')">
+                                </div>
+                            </div>
+
+                            <!-- Generosity -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom" for="genInput">
+                                    <span>Generosity Scale</span>
+                                    <span class="badge-val" id="val_gen">0.296</span>
+                                </label>
+                                <input id="genInput" name="Gen" type="number" step="0.001" min="0" max="1.0" class="form-control input-glass" value="0.296" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.0" max="0.8" step="0.01" value="0.296" oninput="syncVal('genInput', this.value, 'val_gen')">
+                                </div>
+                            </div>
+
+                            <!-- Dystopia Residual -->
+                            <div class="col-12">
+                                <label class="form-label-custom" for="dysInput">
+                                    <span>Dystopia Residual Benchmark</span>
+                                    <span class="badge-val" id="val_dys">2.517</span>
+                                </label>
+                                <input id="dysInput" name="dys" type="number" step="0.001" min="0" max="4.5" class="form-control input-glass" value="2.517" required>
+                                <div class="range-slider-wrap">
+                                    <input type="range" min="0.5" max="3.8" step="0.01" value="2.517" oninput="syncVal('dysInput', this.value, 'val_dys')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="d-flex flex-column flex-sm-row gap-3 mb-4">
+                        <button type="submit" id="btnPredict" name="pred_button" value="1" class="btn btn-predict">
+                            <i class="bi bi-magic"></i> Compute Predicted Rank
+                        </button>
+                        <button type="button" class="btn btn-secondary-custom" onclick="clearForm()">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side: Live Prediction Dashboard -->
+            <div class="col-lg-5">
+                <div class="result-panel">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="badge-pill-soft" id="displayCountryBadge">🇨🇭 Switzerland</span>
+                        <span style="font-size: 0.78rem; color: #94a3b8;" id="displayRegionBadge">Western Europe</span>
+                    </div>
+
+                    <div class="rank-circle-wrap">
+                        <div>
+                            <div class="rank-label">Rank</div>
+                            <div class="rank-number" id="rankOutput">#1</div>
+                        </div>
+                    </div>
+
+                    <div id="tierBadgeEl" class="tier-badge tier-success">
+                        <i class="bi bi-trophy-fill me-1"></i> Top Tier (Very High Happiness)
+                    </div>
+
+                    <p id="summaryText" style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px;">
+                        Flourishing society with high social support, robust economy, and strong life expectancy.
+                    </p>
+
+                    <!-- Rank Meter -->
+                    <div class="text-start mt-3">
+                        <div class="d-flex justify-content-between" style="font-size: 0.78rem; color: #94a3b8;">
+                            <span>#1 Happiest</span>
+                            <span id="percentileText">Top 1% Worldwide</span>
+                            <span>#158 Lowest</span>
+                        </div>
+                        <div class="rank-meter-track">
+                            <div class="rank-meter-fill" id="meterFill" style="width: 100%;"></div>
+                            <div class="rank-meter-pointer" id="meterPointer" style="left: 1%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Key Drivers Breakdown -->
+                    <div class="metric-bar-wrap mt-4 pt-3 border-top border-secondary border-opacity-25">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Indicator Weight Contribution</span>
+                            <span style="font-size: 0.74rem; color: #94a3b8;">Normalized Scale</span>
+                        </div>
+
+                        <div class="metric-bar-label">
+                            <span>Economy (GDP)</span>
+                            <span id="breakdown_gdp">1.396</span>
+                        </div>
+                        <div class="metric-bar-track mb-2">
+                            <div id="bar_gdp" class="metric-bar-fill" style="width: 78%; background: #6366f1;"></div>
+                        </div>
+
+                        <div class="metric-bar-label">
+                            <span>Health (Life Expectancy)</span>
+                            <span id="breakdown_life">0.941</span>
+                        </div>
+                        <div class="metric-bar-track mb-2">
+                            <div id="bar_life" class="metric-bar-fill" style="width: 75%; background: #10b981;"></div>
+                        </div>
+
+                        <div class="metric-bar-label">
+                            <span>Freedom</span>
+                            <span id="breakdown_free">0.665</span>
+                        </div>
+                        <div class="metric-bar-track">
+                            <div id="bar_free" class="metric-bar-fill" style="width: 95%; background: #f59e0b;"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                        <span style="font-size: 0.75rem; color: #64748b;">Model: GBDT (120 Trees)</span>
+                        <button type="button" class="btn btn-sm btn-outline-light py-1 px-3" style="font-size: 0.76rem; border-radius: 8px;" onclick="copyResult()">
+                            <i class="bi bi-clipboard"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toastMessage" class="toast-custom">
+        <span id="toastText"></span>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Preset country dataset
+        const PRESETS = {
+            'Switzerland': {
+                region: 'Western Europe',
+                flag: '🇨🇭',
+                score: 7.587,
+                se: 0.03411,
+                eco: 1.39651,
+                fam: 1.34951,
+                life: 0.94143,
+                free: 0.66557,
+                gov: 0.41978,
+                gen: 0.29678,
+                dys: 2.51738
+            },
+            'United States': {
+                region: 'North America',
+                flag: '🇺🇸',
+                score: 7.119,
+                se: 0.03839,
+                eco: 1.39451,
+                fam: 1.24711,
+                life: 0.86179,
+                free: 0.54604,
+                gov: 0.15890,
+                gen: 0.40105,
+                dys: 2.51011
+            },
+            'Brazil': {
+                region: 'Latin America and Caribbean',
+                flag: '🇧🇷',
+                score: 6.983,
+                se: 0.04076,
+                eco: 0.98124,
+                fam: 1.23287,
+                life: 0.69702,
+                free: 0.49049,
+                gov: 0.17521,
+                gen: 0.14574,
+                dys: 3.26001
+            },
+            'Japan': {
+                region: 'Eastern Asia',
+                flag: '🇯🇵',
+                score: 5.987,
+                se: 0.03581,
+                eco: 1.27074,
+                fam: 1.25712,
+                life: 0.99111,
+                free: 0.49615,
+                gov: 0.18060,
+                gen: 0.10705,
+                dys: 1.68435
+            },
+            'India': {
+                region: 'Southern Asia',
+                flag: '🇮🇳',
+                score: 4.565,
+                se: 0.02043,
+                eco: 0.64499,
+                fam: 0.38174,
+                life: 0.51529,
+                free: 0.39786,
+                gov: 0.08492,
+                gen: 0.26475,
+                dys: 2.27513
+            },
+            'Burundi': {
+                region: 'Sub-Saharan Africa',
+                flag: '🇧🇮',
+                score: 2.905,
+                se: 0.08658,
+                eco: 0.01530,
+                fam: 0.41587,
+                life: 0.22396,
+                free: 0.11850,
+                gov: 0.10062,
+                gen: 0.19727,
+                dys: 1.83302
+            }
+        };
+
+        // Sync slider with numeric input
+        function syncVal(inputId, val, badgeId) {
+            document.getElementById(inputId).value = parseFloat(val);
+            if (badgeId) {
+                document.getElementById(badgeId).innerText = parseFloat(val).toFixed(3);
+            }
+        }
+
+        // Keep badges in sync when typing manually
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const badge = document.getElementById('val_' + this.name);
+                if (badge) {
+                    badge.innerText = parseFloat(this.value || 0).toFixed(3);
+                }
+            });
+        });
+
+        // Load Preset Country
+        function loadPreset(countryName) {
+            const data = PRESETS[countryName];
+            if (!data) return;
+
+            document.getElementById('countryNameInput').value = countryName;
+            document.getElementById('regionSelect').value = data.region;
+
+            document.getElementById('hapScoreInput').value = data.score;
+            document.getElementById('seInput').value = data.se;
+            document.getElementById('ecoInput').value = data.eco;
+            document.getElementById('famInput').value = data.fam;
+            document.getElementById('lifeInput').value = data.life;
+            document.getElementById('freeInput').value = data.free;
+            document.getElementById('govInput').value = data.gov;
+            document.getElementById('genInput').value = data.gen;
+            document.getElementById('dysInput').value = data.dys;
+
+            // Update badge displays
+            ['hapScore', 'se', 'eco', 'fam', 'life', 'free', 'gov', 'gen', 'dys'].forEach(k => {
+                const badge = document.getElementById('val_' + k);
+                if (badge && data[k] !== undefined) badge.innerText = data[k];
+            });
+
+            // Highlight chip
+            document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Trigger prediction automatically
+            submitPrediction();
+        }
+
+        // Clear Form
+        function clearForm() {
+            document.getElementById('happinessForm').reset();
+            document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+            showToast("Form fields reset to defaults.");
+        }
+
+        // Show toast
+        function showToast(msg) {
+            const toast = document.getElementById('toastMessage');
+            document.getElementById('toastText').innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        // Copy Result
+        function copyResult() {
+            const country = document.getElementById('displayCountryBadge').innerText;
+            const rank = document.getElementById('rankOutput').innerText;
+            const tier = document.getElementById('tierBadgeEl').innerText;
+            const text = `${country} Happiness Ranking: ${rank} (${tier}) - World Happiness ML Predictor`;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Result copied to clipboard!");
+            });
+        }
+
+        // Submit prediction via AJAX
+        async function submitPrediction() {
+            const form = document.getElementById('happinessForm');
+            const btn = document.getElementById('btnPredict');
+            const country = document.getElementById('countryNameInput').value.trim();
+
+            if (!country) {
+                showToast("⚠️ Please enter a country name first!");
+                document.getElementById('countryNameInput').focus();
+                return;
+            }
+
+            const originalBtnHtml = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analyzing Socio-Economic Factors...';
+            btn.disabled = true;
+
+            const formData = new FormData(form);
+            formData.append('ajax', '1');
+
+            try {
+                const response = await fetch('/predict/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.result !== undefined) {
+                    updateDashboard(data);
+                    if (data.result <= 10) {
+                        triggerConfetti();
+                    }
+                } else if (data.error) {
+                    showToast("❌ Error: " + data.error);
+                }
+            } catch (err) {
+                showToast("❌ Network error connecting to prediction API.");
+            } finally {
+                btn.innerHTML = originalBtnHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // Update Dashboard Elements
+        function updateDashboard(data) {
+            // Update Text & Badges
+            document.getElementById('displayCountryBadge').innerText = data.country;
+            document.getElementById('displayRegionBadge').innerText = data.region || 'Global';
+            document.getElementById('rankOutput').innerText = '#' + data.result;
+            document.getElementById('percentileText').innerText = data.percentile;
+            document.getElementById('summaryText').innerText = data.summary;
+
+            // Tier Badge Styling
+            const tierEl = document.getElementById('tierBadgeEl');
+            tierEl.className = 'tier-badge tier-' + data.badge;
+            tierEl.innerHTML = `<i class="bi bi-award-fill me-1"></i> ${data.tier}`;
+
+            // Gauge Pointer (1 to 158 nations)
+            const pct = Math.max(1, Math.min(100, (data.result / 158) * 100));
+            document.getElementById('meterPointer').style.left = pct + '%';
+
+            // Breakdown Indicators
+            if (data.gdp !== undefined) {
+                document.getElementById('breakdown_gdp').innerText = data.gdp.toFixed(3);
+                document.getElementById('bar_gdp').style.width = Math.min(100, (data.gdp / 1.8) * 100) + '%';
+            }
+            if (data.life !== undefined) {
+                document.getElementById('breakdown_life').innerText = data.life.toFixed(3);
+                document.getElementById('bar_life').style.width = Math.min(100, (data.life / 1.2) * 100) + '%';
+            }
+            if (data.freedom !== undefined) {
+                document.getElementById('breakdown_free').innerText = data.freedom.toFixed(3);
+                document.getElementById('bar_free').style.width = Math.min(100, (data.freedom / 0.7) * 100) + '%';
+            }
+        }
+
+        // Celebration Confetti for Top Ranks
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 70,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // Form Submit Event Handler
+        document.getElementById('happinessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitPrediction();
+        });
+
+        // Initialize default preset on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPreset('Switzerland');
+        });
+    </script>
+</body>
+</html>
